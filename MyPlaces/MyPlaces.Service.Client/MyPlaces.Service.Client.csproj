@@ -38,9 +38,25 @@
     <Compile Include="Contracts\Repository\IPlacesRepository.cs" />
     <Compile Include="Contracts\Service\Data\IPlacesDataService.cs" />
     <Compile Include="Contracts\Service\General\IHttpService.cs" />
+    <Compile Include="Data\GooglePlacesDataService.cs" />
+    <Compile Include="DTO\Foursqaure\Contact.cs" />
+    <Compile Include="DTO\Foursqaure\Group.cs" />
+    <Compile Include="DTO\Foursqaure\Item.cs" />
+    <Compile Include="DTO\Foursqaure\Location.cs" />
+    <Compile Include="DTO\Foursqaure\Meta.cs" />
+    <Compile Include="DTO\Foursqaure\Response.cs" />
+    <Compile Include="DTO\Foursqaure\RootObject.cs" />
+    <Compile Include="DTO\Foursqaure\Venue.cs" />
+    <Compile Include="DTO\Google\Result.cs" />
+    <Compile Include="DTO\Google\RootObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\BaseRepository.cs" />
+    <Compile Include="Repository\PlacesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.3.193\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
     </Reference>

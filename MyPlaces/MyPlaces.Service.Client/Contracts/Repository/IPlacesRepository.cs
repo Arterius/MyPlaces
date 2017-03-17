@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyPlaces.Model;
 
@@ -6,6 +7,6 @@ namespace MyPlaces.Service.Client.Contracts.Repository
 {
     public interface IPlacesRepository
     {
-        Task<List<Place>> GetPlaces();
+        Task<List<Place>> GetPlaces(Uri requestUri);
     }
 }
