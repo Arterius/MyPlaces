@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyPlaces.Model;
 
 namespace MyPlaces.Service.Client.Contracts.Repository
 {
-    public interface IPlacesRepository
+    public interface IPlacesRepository<T>
     {
-        Task<List<Place>> GetPlaces(Uri requestUri);
+        Task<T> GetPlaces(Uri requestUri);
     }
 }

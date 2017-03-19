@@ -1,4 +1,4 @@
-﻿namespace MyPlaces.Service.Client.DTO.Foursqaure
+﻿namespace MyPlaces.Service.Client.DTO.Foursquare
 {
     public class Item
     {
