@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Net;
 
-namespace MyPlaces.Service.Client.Data.Helper
+namespace MyPlaces.Service.Client.Service.Helper
 {
     public class GooglePlaceUriBuilder : IUriBuilder
     {
@@ -17,9 +18,7 @@ namespace MyPlaces.Service.Client.Data.Helper
 
         public Uri Construct()
         {
-            //TODO: Encode {keyWord} to valid searchable string
-
-            string result = $"{_baseUri}?query={_keyword}&key={_apiKey}";
+            string result = $"{_baseUri}?query={WebUtility.HtmlEncode(_keyword)}&key={_apiKey}";
 
             return new Uri(result);
         }

@@ -6,9 +6,9 @@ using MyPlaces.Model;
 using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.Service.Client.DTO.Google;
-using MyPlaces.Service.Client.Data.Helper;
+using MyPlaces.Service.Client.Service.Helper;
 
-namespace MyPlaces.Service.Client.Data
+namespace MyPlaces.Service.Client.Service
 {
     public class GooglePlacesDataService : IPlacesDataService
     {
@@ -32,7 +32,7 @@ namespace MyPlaces.Service.Client.Data
                 IUriBuilder uriBuilder = new GooglePlaceUriBuilder(_baseUri, _apiKey, keyword);
                 RootObject response = await _placesRepository.GetPlaces(uriBuilder.Construct());
 
-                if (response.Status != "200")
+                if (response.Status != "OK")
                 {
                     throw new Exception("HTTP response is not OK");
                 }

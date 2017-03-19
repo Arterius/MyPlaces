@@ -6,9 +6,9 @@ using MyPlaces.Model;
 using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.Service.Client.DTO.Foursquare;
-using MyPlaces.Service.Client.Data.Helper;
+using MyPlaces.Service.Client.Service.Helper;
 
-namespace MyPlaces.Service.Client.Data
+namespace MyPlaces.Service.Client.Service
 {
     public class FoursquareVenuesDataService : IPlacesDataService
     {

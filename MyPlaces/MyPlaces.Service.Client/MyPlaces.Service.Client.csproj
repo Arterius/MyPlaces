@@ -38,11 +38,11 @@
     <Compile Include="Contracts\Repository\IPlacesRepository.cs" />
     <Compile Include="Contracts\Service\Data\IPlacesDataService.cs" />
     <Compile Include="Contracts\Service\General\IHttpService.cs" />
-    <Compile Include="Data\FoursquareVenuesDataService.cs" />
-    <Compile Include="Data\GooglePlacesDataService.cs" />
-    <Compile Include="Data\Helper\FoursquareVenueUriBuilder.cs" />
-    <Compile Include="Data\Helper\GooglePlaceUriBuilder.cs" />
-    <Compile Include="Data\Helper\IUriBuilder.cs" />
+    <Compile Include="Service\FoursquareVenuesDataService.cs" />
+    <Compile Include="Service\GooglePlacesDataService.cs" />
+    <Compile Include="Service\Helper\FoursquareVenueUriBuilder.cs" />
+    <Compile Include="Service\Helper\GooglePlaceUriBuilder.cs" />
+    <Compile Include="Service\Helper\IUriBuilder.cs" />
     <Compile Include="DTO\Foursquare\Contact.cs" />
     <Compile Include="DTO\Foursquare\Group.cs" />
     <Compile Include="DTO\Foursquare\Item.cs" />
@@ -57,6 +57,7 @@
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\FoursquareVenuesRepository.cs" />
     <Compile Include="Repository\GooglePlacesRepository.cs" />
+    <Compile Include="Service\HttpService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

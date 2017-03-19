@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Net;
 
-namespace MyPlaces.Service.Client.Data.Helper
+namespace MyPlaces.Service.Client.Service.Helper
 {
     public class FoursquareVenueUriBuilder : IUriBuilder
     {
@@ -19,8 +20,7 @@ namespace MyPlaces.Service.Client.Data.Helper
 
         public Uri Construct()
         {
-            //TODO: Encode {keyWord} to valid searchable string
-            string result = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={_keyword}";
+            string result = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={WebUtility.HtmlEncode(_keyword)}";
 
             return new Uri(result);
         }

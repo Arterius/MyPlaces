@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyPlaces.Service.Client.Data.Helper
+namespace MyPlaces.Service.Client.Service.Helper
 {
     public interface IUriBuilder
     {
