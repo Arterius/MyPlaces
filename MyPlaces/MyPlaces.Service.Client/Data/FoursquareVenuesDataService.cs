@@ -5,21 +5,23 @@ using System.Threading.Tasks;
 using MyPlaces.Model;
 using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.Data;
-using MyPlaces.Service.Client.DTO.Google;
+using MyPlaces.Service.Client.DTO.Foursquare;
 using MyPlaces.Service.Client.Data.Helper;
 
 namespace MyPlaces.Service.Client.Data
 {
-    public class GooglePlacesDataService : IPlacesDataService
+    public class FoursquareVenuesDataService : IPlacesDataService
     {
         private readonly IPlacesRepository<RootObject> _placesRepository;
-        private const string _baseUri = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-        private readonly string _apiKey;
+        private const string _baseUri = "https://api.foursquare.com/v2/venues/explore";
+        private readonly string _clientId;
+        private readonly string _clientSecret;
 
-        public GooglePlacesDataService(IPlacesRepository<RootObject> placesRepository, string apiKey)
+        public FoursquareVenuesDataService(IPlacesRepository<RootObject> placesRepository, string clientId, string clientSecret)
         {
             _placesRepository = placesRepository;
-            _apiKey = apiKey;
+            _clientId = clientId;
+            _clientSecret = clientSecret;
         }
 
         public async Task<List<Place>> Search(string keyword)
@@ -29,19 +31,20 @@ namespace MyPlaces.Service.Client.Data
 
             try
             {
-                IUriBuilder uriBuilder = new GooglePlaceUriBuilder(_baseUri, _apiKey, keyword);
+                IUriBuilder uriBuilder = new FoursquareVenueUriBuilder(_baseUri, _clientId, _clientSecret, keyword);
                 RootObject response = await _placesRepository.GetPlaces(uriBuilder.Construct());
 
-                if (response.Status != "200")
+                if (response.Meta.Code != 200)
                 {
                     throw new Exception("HTTP response is not OK");
                 }
 
-                List<Place> places = response.Results.Select(p => new Place
+                List<Venue> venues = response.Response.Groups.SelectMany(g => g.Items.Select(i => i.Venue)).ToList();
+                List<Place> places = venues.Select(v => new Place
                 {
-                    Address = p.FormattedAddress,
-                    Name = p.Name,
-                    Rating = p.Rating
+                    Address = v.Location.Address,
+                    Name = v.Name,
+                    Rating = v.Rating
                 }).ToList();
 
                 return places;

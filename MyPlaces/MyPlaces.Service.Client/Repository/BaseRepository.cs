@@ -16,7 +16,9 @@ namespace MyPlaces.Service.Client.Repository
 
         protected async Task<T> GetAsync<T>(Uri requestUri) where T : new()
         {
-            //TODO: Check for null input parameter
+            if (requestUri == null)
+                throw new ArgumentNullException(nameof(requestUri));
+
             T result;
             try
             {
@@ -25,9 +27,9 @@ namespace MyPlaces.Service.Client.Repository
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }

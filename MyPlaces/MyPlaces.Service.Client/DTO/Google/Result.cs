@@ -1,4 +1,6 @@
-﻿namespace MyPlaces.Service.Client.DTO.Google
+﻿using Newtonsoft.Json;
+
+namespace MyPlaces.Service.Client.DTO.Google
 {
     public class Result
     {
@@ -6,6 +8,7 @@
 
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "formatted_address")]
         public string FormattedAddress { get; set; }
 
         public double Rating { get; set; }
