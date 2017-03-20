@@ -27,7 +27,7 @@ namespace MyPlaces.ViewModel
                 if (_searchTerm == value) return;
                 _searchTerm = value;
 
-                //Uncomment out to run from WPF project
+                //Uncomment to run from WPF project
                 //DelayedSearch();
             }
         }
