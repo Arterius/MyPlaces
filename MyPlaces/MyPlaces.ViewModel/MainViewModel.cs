@@ -8,12 +8,15 @@ using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.ViewModel.Common;
 using MyPlaces.Model;
 using GalaSoft.MvvmLight.Command;
+using System.Threading;
 
 namespace MyPlaces.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+        private const int _searchDelay = 500;
         private readonly IPlacesDataService _placesDataService;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private string _searchTerm;
         public string SearchTerm
@@ -23,10 +26,11 @@ namespace MyPlaces.ViewModel
             {
                 if (_searchTerm == value) return;
                 _searchTerm = value;
-                SearchCommand.RaiseCanExecuteChanged();
+
+                if (!string.IsNullOrWhiteSpace(_searchTerm))
+                    ExecuteDelayedSearch();
             }
         }
-        //public string SearchTerm { get; set; }
 
         public RangeObservableCollection<Place> Places { get; set; }
 
@@ -37,6 +41,25 @@ namespace MyPlaces.ViewModel
             _placesDataService = placesDataService ?? throw new ArgumentNullException(nameof(placesDataService));
             Places = new RangeObservableCollection<Place>();
             SearchCommand = new RelayCommand(Search, () => !string.IsNullOrWhiteSpace(SearchTerm));
+        }
+
+        private async void ExecuteDelayedSearch()
+        {
+            string originalSearchTerm = SearchTerm;
+
+            Interlocked.Exchange(ref _cancellationTokenSource, new CancellationTokenSource()).Cancel();
+
+            try
+            {
+                await Task.Delay(_searchDelay, _cancellationTokenSource.Token).ContinueWith(async (_) =>
+                {
+                    if (originalSearchTerm == SearchTerm)
+                    {
+                        Places.AddRange(await _placesDataService.Search(SearchTerm), true);
+                    }
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
+            }
+            catch { }
         }
 
         private async void Search()
