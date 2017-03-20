@@ -1,9 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage x:Class="MyPlaces.MainPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyPlaces"
-             x:Class="MyPlaces.MainPage">
-    <Label Text="Welcome to Xamarin Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+             xmlns:behaviors="clr-namespace:MyPlaces.Behaviors"
+             BindingContext="{Binding Main, Source={StaticResource ViewModelLocator}, Mode=OneWay}">
+
+    <StackLayout>
+        <Entry Text="{Binding SearchTerm, Mode=OneWayToSource}">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <ListView ItemsSource="{Binding Places}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name, Mode=OneWay}" Margin="12,6,6,6" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>

@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         DataContext="{Binding Main, Source={StaticResource ViewModelLocator}, Mode=OneWay}">
     <StackPanel>
-        <!--<Button Margin="20" Content="Service Test" Click="Button_Click" />-->
         <TextBox Text="{Binding SearchTerm, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Margin="20" />
-        <Button Content="Search" Margin="20" Command="{Binding SearchCommand}" />
+        <!--<Button Content="Search" Margin="20" Command="{Binding SearchCommand}" />-->
 
         <ListBox ItemsSource="{Binding Places}">
             <ListBox.ItemTemplate>

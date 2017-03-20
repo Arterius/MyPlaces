@@ -27,8 +27,8 @@ namespace MyPlaces.ViewModel
                 if (_searchTerm == value) return;
                 _searchTerm = value;
 
-                if (!string.IsNullOrWhiteSpace(_searchTerm))
-                    ExecuteDelayedSearch();
+                //Uncomment out to run from WPF project
+                //DelayedSearch();
             }
         }
 
@@ -40,11 +40,13 @@ namespace MyPlaces.ViewModel
         {
             _placesDataService = placesDataService ?? throw new ArgumentNullException(nameof(placesDataService));
             Places = new RangeObservableCollection<Place>();
-            SearchCommand = new RelayCommand(Search, () => !string.IsNullOrWhiteSpace(SearchTerm));
+            SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
         }
 
-        private async void ExecuteDelayedSearch()
+        private async void DelayedSearch()
         {
+            if (string.IsNullOrWhiteSpace(_searchTerm)) return;
+
             string originalSearchTerm = SearchTerm;
 
             Interlocked.Exchange(ref _cancellationTokenSource, new CancellationTokenSource()).Cancel();
@@ -60,11 +62,6 @@ namespace MyPlaces.ViewModel
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }
             catch { }
-        }
-
-        private async void Search()
-        {
-            Places.AddRange(await _placesDataService.Search(SearchTerm), true);
         }
     }
 }
