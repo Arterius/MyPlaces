@@ -38,7 +38,7 @@ namespace MyPlaces.ViewModel
 
         public MainViewModel(IPlacesDataService placesDataService)
         {
-            _placesDataService = placesDataService ?? throw new ArgumentNullException(nameof(placesDataService));
+            _placesDataService = placesDataService;// ?? throw new ArgumentNullException(nameof(placesDataService));
             Places = new RangeObservableCollection<Place>();
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
         }

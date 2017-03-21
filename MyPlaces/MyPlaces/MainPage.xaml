@@ -15,7 +15,11 @@
         <ListView ItemsSource="{Binding Places}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Label Text="{Binding Name, Mode=OneWay}" Margin="12,6,6,6" />
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Label Text="{Binding Name}" Margin="12,6,6,6" />
+                        </ViewCell.View>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
