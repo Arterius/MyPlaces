@@ -4,6 +4,6 @@
              xmlns:viewModel="clr-namespace:MyPlaces.ViewModel;assembly=MyPlaces.ViewModel"
              x:Class="MyPlaces.App">
     <Application.Resources>
-        <viewModel:ViewModelLocator x:Key="ViewModelLocator" />
+        <ResourceDictionary></ResourceDictionary>
     </Application.Resources>
 </Application>

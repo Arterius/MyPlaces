@@ -12,6 +12,7 @@ namespace MyPlaces
         public MainPage()
         {
             InitializeComponent();
+            BindingContext = App.Locator.Main;
         }
     }
 }

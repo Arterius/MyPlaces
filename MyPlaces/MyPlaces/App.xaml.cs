@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyPlaces.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,12 @@ namespace MyPlaces
 {
     public partial class App : Application
     {
+        private static readonly ViewModelLocator _locator = new ViewModelLocator();
+        public static ViewModelLocator Locator
+        {
+            get { return _locator; }
+        }
+
         public App()
         {
             InitializeComponent();
