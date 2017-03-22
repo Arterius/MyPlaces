@@ -8,21 +8,23 @@ namespace MyPlaces.Service.Client.Service.Helper
         private readonly string _baseUri;
         private readonly string _clientId;
         private readonly string _clientSecret;
-        private readonly string _keyword;
 
-        public FoursquareVenueUriBuilder(string baseUri, string clientId, string clientSecret, string keyword)
+        public FoursquareVenueUriBuilder(string baseUri, string clientId, string clientSecret)
         {
             _baseUri = baseUri;
             _clientId = clientId;
             _clientSecret = clientSecret;
-            _keyword = keyword;
         }
 
-        public Uri Construct()
+        public Uri ConstructSearch(string keyword)
         {
-            string result = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={WebUtility.HtmlEncode(_keyword)}";
+            string uri = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={WebUtility.HtmlEncode(keyword)}";
+            return new Uri(uri);
+        }
 
-            return new Uri(result);
+        public Uri ConstructGetNext(string param)
+        {
+            throw new NotImplementedException();
         }
     }
 }

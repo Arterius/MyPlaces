@@ -8,5 +8,6 @@ namespace MyPlaces.Service.Client.Contracts.Service.Data
     public interface IPlacesDataService
     {
         Task<List<Place>> Search(string keyWord);
+        Task<List<Place>> GetNext();
     }
 }

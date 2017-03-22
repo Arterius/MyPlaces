@@ -13,6 +13,7 @@ namespace MyPlaces.Service.Client.Service
     public class FoursquareVenuesDataService : IPlacesDataService
     {
         private readonly IPlacesRepository<RootObject> _placesRepository;
+        private readonly IUriBuilder _uriBuilder;
         private const string _baseUri = "https://api.foursquare.com/v2/venues/explore";
         private readonly string _clientId;
         private readonly string _clientSecret;
@@ -22,6 +23,7 @@ namespace MyPlaces.Service.Client.Service
             _placesRepository = placesRepository;
             _clientId = clientId;
             _clientSecret = clientSecret;
+            _uriBuilder = new FoursquareVenueUriBuilder(_baseUri, _clientId, _clientSecret);
         }
 
         public async Task<List<Place>> Search(string keyword)
@@ -31,8 +33,7 @@ namespace MyPlaces.Service.Client.Service
 
             try
             {
-                IUriBuilder uriBuilder = new FoursquareVenueUriBuilder(_baseUri, _clientId, _clientSecret, keyword);
-                RootObject response = await _placesRepository.GetPlaces(uriBuilder.Construct());
+                RootObject response = await _placesRepository.GetPlaces(_uriBuilder.ConstructSearch(keyword));
 
                 if (response.Meta.Code != 200)
                 {
@@ -53,6 +54,11 @@ namespace MyPlaces.Service.Client.Service
             {
                 throw;
             }
+        }
+
+        public async Task<List<Place>> GetNext()
+        {
+            throw new NotImplementedException();
         }
     }
 }

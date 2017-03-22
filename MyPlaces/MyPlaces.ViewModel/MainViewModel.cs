@@ -68,7 +68,7 @@ namespace MyPlaces.ViewModel
 
         private async void LoadMore()
         {
-
+            Places.AddRange(await _placesDataService.GetNext());
         }
     }
 }

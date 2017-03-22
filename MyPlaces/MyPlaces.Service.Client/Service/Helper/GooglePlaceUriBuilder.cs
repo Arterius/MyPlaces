@@ -7,20 +7,23 @@ namespace MyPlaces.Service.Client.Service.Helper
     {
         private readonly string _baseUri;
         private readonly string _apiKey;
-        private readonly string _keyword;
 
-        public GooglePlaceUriBuilder(string baseUri, string apiKey, string keyword)
+        public GooglePlaceUriBuilder(string baseUri, string apiKey)
         {
             _baseUri = baseUri;
             _apiKey = apiKey;
-            _keyword = keyword;
         }
 
-        public Uri Construct()
+        public Uri ConstructSearch(string keyword)
         {
-            string result = $"{_baseUri}?query={WebUtility.HtmlEncode(_keyword)}&key={_apiKey}";
+            string uri = $"{_baseUri}?query={WebUtility.HtmlEncode(keyword)}&key={_apiKey}";
+            return new Uri(uri);
+        }
 
-            return new Uri(result);
+        public Uri ConstructGetNext(string param)
+        {
+            string uri = $"{_baseUri}?pagetoken={param}&key={_apiKey}";
+            return new Uri(uri);
         }
     }
 }
