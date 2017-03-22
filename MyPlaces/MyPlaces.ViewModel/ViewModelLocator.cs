@@ -1,10 +1,12 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Views;
 using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.Service.Client.Service;
 using MyPlaces.Service.Client.Repository;
 using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.General;
+using MyPlaces.ViewModel.Service;
 using GoogleDto = MyPlaces.Service.Client.DTO.Google;
 using FoursquareDto = MyPlaces.Service.Client.DTO.Foursquare;
 
@@ -12,13 +14,23 @@ namespace MyPlaces.ViewModel
 {
     public class ViewModelLocator
     {
+        public const string MainPage = "MainPage";
+        public const string SettingsPage = "SettingsPage";
+
+        public NavigationService NavigationService { get; private set; }
+
         public ViewModelLocator()
         {
+            NavigationService = new NavigationService();
+
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
 
+            SimpleIoc.Default.Register<INavigationService>(() => NavigationService);
             SimpleIoc.Default.Register<IHttpService, HttpService>();
+
             //SimpleIoc.Default.Register<IPlacesRepository<RootObject>, GooglePlacesRepository>();
             //SimpleIoc.Default.Register<IPlacesDataService>(() => new GooglePlacesDataService
             //(
@@ -40,6 +52,14 @@ namespace MyPlaces.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        public SettingsViewModel Settings
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SettingsViewModel>();
             }
         }
 

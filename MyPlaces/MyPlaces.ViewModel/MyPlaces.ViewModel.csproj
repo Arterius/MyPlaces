@@ -38,6 +38,8 @@
     <Compile Include="Common\RangeObservableCollection.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\NavigationService.cs" />
+    <Compile Include="SettingsViewModel.cs" />
     <Compile Include="ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>

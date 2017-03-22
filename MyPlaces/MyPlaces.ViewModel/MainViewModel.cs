@@ -9,6 +9,7 @@ using MyPlaces.ViewModel.Common;
 using MyPlaces.Model;
 using GalaSoft.MvvmLight.Command;
 using System.Threading;
+using GalaSoft.MvvmLight.Views;
 
 namespace MyPlaces.ViewModel
 {
@@ -16,6 +17,7 @@ namespace MyPlaces.ViewModel
     {
         private const int _searchDelay = 500;
         private readonly IPlacesDataService _placesDataService;
+        private readonly INavigationService _navigationService;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private string _searchTerm;
@@ -36,16 +38,26 @@ namespace MyPlaces.ViewModel
 
         public RelayCommand SearchCommand { get; private set; }
         public RelayCommand LoadMoreCommand { get; private set; }
+        public RelayCommand NavigateToSettingsCommand { get; private set; }
 
-        public MainViewModel(IPlacesDataService placesDataService)
+        public MainViewModel(IPlacesDataService placesDataService, INavigationService navigationService)
         {
-            _placesDataService = placesDataService;// ?? throw new ArgumentNullException(nameof(placesDataService));
+            if (placesDataService == null) throw new ArgumentException(nameof(placesDataService));
+            if (navigationService == null) throw new ArgumentException(nameof(navigationService));
+
+            _placesDataService = placesDataService;
+            _navigationService = navigationService;
+
             Places = new RangeObservableCollection<Place>();
+
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
             LoadMoreCommand = new RelayCommand(LoadMore, () => !string.IsNullOrWhiteSpace(SearchTerm));
+            NavigateToSettingsCommand = new RelayCommand(() => _navigationService.NavigateTo(ViewModelLocator.SettingsPage));
         }
 
-        private async void DelayedSearch()
+        private async void DelayedSearch() => await DelayedSearchAsync();
+
+        private async Task DelayedSearchAsync()
         {
             if (string.IsNullOrWhiteSpace(_searchTerm)) return;
 
@@ -66,7 +78,9 @@ namespace MyPlaces.ViewModel
             catch { }
         }
 
-        private async void LoadMore()
+        private async void LoadMore() => await LoadMoreAsync();
+
+        private async Task LoadMoreAsync()
         {
             Places.AddRange(await _placesDataService.GetNext());
         }

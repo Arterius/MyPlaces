@@ -40,7 +40,7 @@ namespace MyPlaces.Service.Client.Service
         {
             if (string.IsNullOrEmpty(_nextPageToken))
             {
-                throw new ArgumentOutOfRangeException(nameof(_nextPageToken));
+                throw new InvalidOperationException("No data to retrieve");
             }
             return await MakeRequest(_uriBuilder.ConstructGetNext(null, _nextPageToken));
         }

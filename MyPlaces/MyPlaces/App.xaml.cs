@@ -1,4 +1,5 @@
 ﻿using MyPlaces.ViewModel;
+using MyPlaces.ViewModel.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,15 @@ namespace MyPlaces
 
         public App()
         {
-            InitializeComponent();
+            Locator.NavigationService.Configure(ViewModelLocator.MainPage, typeof(MainPage));
+            Locator.NavigationService.Configure(ViewModelLocator.SettingsPage, typeof(SettingsPage));
 
-            MainPage = new MyPlaces.MainPage();
+            NavigationPage firstPage = new NavigationPage(new MainPage());
+
+            Locator.NavigationService.Initialize(firstPage);
+
+            InitializeComponent();
+            MainPage = firstPage;
         }
 
         protected override void OnStart()

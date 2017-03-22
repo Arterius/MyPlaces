@@ -6,6 +6,8 @@
              xmlns:behaviors="clr-namespace:MyPlaces.Behaviors">
 
     <StackLayout>
+        <Button Text="Navigate To Settings" Command="{Binding NavigateToSettingsCommand}" />
+        
         <Entry Text="{Binding SearchTerm, Mode=OneWayToSource}">
             <Entry.Behaviors>
                 <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}" />
