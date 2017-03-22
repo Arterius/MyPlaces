@@ -35,12 +35,14 @@ namespace MyPlaces.ViewModel
         public RangeObservableCollection<Place> Places { get; set; }
 
         public RelayCommand SearchCommand { get; private set; }
+        public RelayCommand LoadMoreCommand { get; private set; }
 
         public MainViewModel(IPlacesDataService placesDataService)
         {
             _placesDataService = placesDataService;// ?? throw new ArgumentNullException(nameof(placesDataService));
             Places = new RangeObservableCollection<Place>();
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
+            LoadMoreCommand = new RelayCommand(LoadMore, () => !string.IsNullOrWhiteSpace(SearchTerm));
         }
 
         private async void DelayedSearch()
@@ -62,6 +64,11 @@ namespace MyPlaces.ViewModel
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }
             catch { }
+        }
+
+        private async void LoadMore()
+        {
+
         }
     }
 }
