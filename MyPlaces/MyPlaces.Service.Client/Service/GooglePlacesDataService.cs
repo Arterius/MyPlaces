@@ -42,7 +42,7 @@ namespace MyPlaces.Service.Client.Service
             {
                 throw new ArgumentOutOfRangeException(nameof(_nextPageToken));
             }
-            return await MakeRequest(_uriBuilder.ConstructGetNext(_nextPageToken));
+            return await MakeRequest(_uriBuilder.ConstructGetNext(null, _nextPageToken));
         }
 
         private async Task<List<Place>> MakeRequest(Uri requestUri)

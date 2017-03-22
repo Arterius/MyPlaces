@@ -5,6 +5,6 @@ namespace MyPlaces.Service.Client.Service.Helper
     public interface IUriBuilder
     {
         Uri ConstructSearch(string keyword);
-        Uri ConstructGetNext(string param);
+        Uri ConstructGetNext(string keyword, string param);
     }
 }

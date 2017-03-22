@@ -21,7 +21,7 @@ namespace MyPlaces.ViewModel
         private string _searchTerm;
         public string SearchTerm
         {
-            get { return _searchTerm; }
+            get { return _searchTerm.Trim(); }
             set
             {
                 if (_searchTerm == value) return;

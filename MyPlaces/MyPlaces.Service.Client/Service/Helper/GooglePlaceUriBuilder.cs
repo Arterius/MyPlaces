@@ -20,9 +20,9 @@ namespace MyPlaces.Service.Client.Service.Helper
             return new Uri(uri);
         }
 
-        public Uri ConstructGetNext(string param)
+        public Uri ConstructGetNext(string keyword, string pageToken)
         {
-            string uri = $"{_baseUri}?pagetoken={param}&key={_apiKey}";
+            string uri = $"{_baseUri}?pagetoken={pageToken}&key={_apiKey}";
             return new Uri(uri);
         }
     }
