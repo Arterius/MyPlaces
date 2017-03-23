@@ -9,6 +9,7 @@ using MyPlaces.Service.Client.Contracts.Service.General;
 using MyPlaces.ViewModel.Service;
 using GoogleDto = MyPlaces.Service.Client.DTO.Google;
 using FoursquareDto = MyPlaces.Service.Client.DTO.Foursquare;
+using MyPlaces.ViewModel.Common;
 
 namespace MyPlaces.ViewModel
 {
@@ -30,13 +31,14 @@ namespace MyPlaces.ViewModel
 
             SimpleIoc.Default.Register<INavigationService>(() => NavigationService);
             SimpleIoc.Default.Register<IHttpService, HttpService>();
+            SimpleIoc.Default.Register<IPlacesDataServiceFactory, PlacesDataServiceFactory>();
 
-            //SimpleIoc.Default.Register<IPlacesRepository<RootObject>, GooglePlacesRepository>();
-            //SimpleIoc.Default.Register<IPlacesDataService>(() => new GooglePlacesDataService
-            //(
-            //    SimpleIoc.Default.GetInstance<IPlacesRepository<RootObject>>(),
-            //    "AIzaSyDI3Q6N_PIKL3yW_HR2OApUhFFR-BbIzxs"
-            //));
+            SimpleIoc.Default.Register<IPlacesRepository<GoogleDto.RootObject>, GooglePlacesRepository>();
+            SimpleIoc.Default.Register<IPlacesDataService>(() => new GooglePlacesDataService
+            (
+                SimpleIoc.Default.GetInstance<IPlacesRepository<GoogleDto.RootObject>>(),
+                "AIzaSyDI3Q6N_PIKL3yW_HR2OApUhFFR-BbIzxs"
+            ), PlacesDataServiceProviders.Google);
 
             SimpleIoc.Default.Register<IPlacesRepository<FoursquareDto.RootObject>, FoursquareVenuesRepository>();
             SimpleIoc.Default.Register<IPlacesDataService>(() => new FoursquareVenuesDataService
@@ -44,7 +46,7 @@ namespace MyPlaces.ViewModel
                 SimpleIoc.Default.GetInstance<IPlacesRepository<FoursquareDto.RootObject>>(),
                 "UZH4KD340XSEKTU1WPUJT0EKNSF1QCOH00EUTQGOASKWIRUB",
                 "ZL1NJN13P53C4OSHHMTPSHZSCDPBDOWWBMAISERPRUGAVVP4"
-            ));
+            ), PlacesDataServiceProviders.Foursquare);
         }
 
         public MainViewModel Main

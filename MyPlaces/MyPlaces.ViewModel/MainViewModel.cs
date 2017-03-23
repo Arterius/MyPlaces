@@ -5,20 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MyPlaces.Service.Client.Contracts.Service.Data;
-using MyPlaces.ViewModel.Common;
+using MyPlaces.ViewModel.Helpers;
 using MyPlaces.Model;
 using GalaSoft.MvvmLight.Command;
 using System.Threading;
 using GalaSoft.MvvmLight.Views;
+using MyPlaces.ViewModel.Common;
 
 namespace MyPlaces.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
         private const int _searchDelay = 500;
-        private readonly IPlacesDataService _placesDataService;
+        private readonly IPlacesDataServiceFactory _placesDataServiceFactory;
         private readonly INavigationService _navigationService;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+        private string _defaultDataProvider;
 
         private string _searchTerm;
         public string SearchTerm
@@ -40,13 +43,15 @@ namespace MyPlaces.ViewModel
         public RelayCommand LoadMoreCommand { get; private set; }
         public RelayCommand NavigateToSettingsCommand { get; private set; }
 
-        public MainViewModel(IPlacesDataService placesDataService, INavigationService navigationService)
+        public MainViewModel(IPlacesDataServiceFactory placesDataServiceFactory, INavigationService navigationService)
         {
-            if (placesDataService == null) throw new ArgumentException(nameof(placesDataService));
+            if (placesDataServiceFactory == null) throw new ArgumentException(nameof(placesDataServiceFactory));
             if (navigationService == null) throw new ArgumentException(nameof(navigationService));
 
-            _placesDataService = placesDataService;
+            _placesDataServiceFactory = placesDataServiceFactory;
             _navigationService = navigationService;
+
+            _defaultDataProvider = PlacesDataServiceProviders.Foursquare;
 
             Places = new RangeObservableCollection<Place>();
 
@@ -71,7 +76,8 @@ namespace MyPlaces.ViewModel
                 {
                     if (originalSearchTerm == SearchTerm)
                     {
-                        Places.AddRange(await _placesDataService.Search(SearchTerm), true);
+                        IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(_defaultDataProvider);
+                        Places.AddRange(await dataService.Search(SearchTerm), true);
                     }
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }
@@ -82,7 +88,8 @@ namespace MyPlaces.ViewModel
 
         private async Task LoadMoreAsync()
         {
-            Places.AddRange(await _placesDataService.GetNext());
+            IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(_defaultDataProvider);
+            Places.AddRange(await dataService.GetNext());
         }
     }
 }
