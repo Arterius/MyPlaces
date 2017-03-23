@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="Behaviors\BindableBehavior.cs" />
     <Compile Include="Behaviors\EventToCommandBehavior.cs" />
+    <Compile Include="Controls\BindablePicker.cs" />
     <Compile Include="Controls\InfiniteListView.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

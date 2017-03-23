@@ -21,8 +21,6 @@ namespace MyPlaces.ViewModel
         private readonly INavigationService _navigationService;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        private string _defaultDataProvider;
-
         private string _searchTerm;
         public string SearchTerm
         {
@@ -51,13 +49,16 @@ namespace MyPlaces.ViewModel
             _placesDataServiceFactory = placesDataServiceFactory;
             _navigationService = navigationService;
 
-            _defaultDataProvider = PlacesDataServiceProviders.Foursquare;
-
             Places = new RangeObservableCollection<Place>();
 
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
             LoadMoreCommand = new RelayCommand(LoadMore, () => !string.IsNullOrWhiteSpace(SearchTerm));
             NavigateToSettingsCommand = new RelayCommand(() => _navigationService.NavigateTo(ViewModelLocator.SettingsPage));
+            //NavigateToSettingsCommand = new RelayCommand(() =>
+            //{
+            //    _defaultDataProvider = PlacesDataServiceProviders.Google;
+            //    SearchCommand.Execute(null);
+            //});
         }
 
         private async void DelayedSearch() => await DelayedSearchAsync();
@@ -76,20 +77,21 @@ namespace MyPlaces.ViewModel
                 {
                     if (originalSearchTerm == SearchTerm)
                     {
-                        IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(_defaultDataProvider);
-                        Places.AddRange(await dataService.Search(SearchTerm), true);
+                        Places.AddRange(await RetrieveDataAsync(), clear: true);
                     }
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }
             catch { }
         }
 
-        private async void LoadMore() => await LoadMoreAsync();
+        private async void LoadMore() => Places.AddRange(await RetrieveDataAsync(loadMore: true), clear: false);
 
-        private async Task LoadMoreAsync()
+        private async Task<List<Place>> RetrieveDataAsync(bool loadMore = false)
         {
-            IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(_defaultDataProvider);
-            Places.AddRange(await dataService.GetNext());
+            IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(PlacesDataServiceProviders.Instance.Default.Id);
+            List<Place> places = loadMore ? await dataService.GetNext() : await dataService.Search(SearchTerm);
+
+            return places;
         }
     }
 }
