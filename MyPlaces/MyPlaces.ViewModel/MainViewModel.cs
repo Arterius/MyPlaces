@@ -20,6 +20,7 @@ namespace MyPlaces.ViewModel
         private readonly IPlacesDataServiceFactory _placesDataServiceFactory;
         private readonly INavigationService _navigationService;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private bool _pagingAvailable = true;
 
         private string _searchTerm;
         public string SearchTerm
@@ -81,12 +82,21 @@ namespace MyPlaces.ViewModel
             catch { }
         }
 
-        private async void LoadMore() => Places.AddRange(await RetrieveDataAsync(loadMore: true), clear: false);
+        private async void LoadMore() => await LoadMoreAsync();
+
+        private async Task LoadMoreAsync()
+        {
+            if (_pagingAvailable)
+            {
+                Places.AddRange(await RetrieveDataAsync(loadMore: true), clear: false);
+            }
+        }
 
         private async void ReloadData() => await ReloadDataAsync();
 
         private async Task ReloadDataAsync()
         {
+            _pagingAvailable = true;
             List<Place> places = await RetrieveDataAsync();
             Places.AddRange(places, true);
         }
@@ -99,7 +109,11 @@ namespace MyPlaces.ViewModel
                 IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(PlacesDataServiceProviders.Instance.Default.Id);
                 places = loadMore ? await dataService.GetNext() : await dataService.Search(SearchTerm);
             }
-            catch(BaseException)
+            catch(DataPaginationException)
+            {
+                _pagingAvailable = false;
+            }
+            catch (BaseException)
             {
                 //
             }

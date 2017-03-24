@@ -3,27 +3,50 @@
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyPlaces.Controls"
-             xmlns:behaviors="clr-namespace:MyPlaces.Behaviors">
+             xmlns:behaviors="clr-namespace:MyPlaces.Behaviors"
+             Title = "My Places">
 
-    <StackLayout>
-        <Button Text="Navigate To Settings" Command="{Binding NavigateToSettingsCommand}" />
-        
-        <Entry Text="{Binding SearchTerm, Mode=OneWayToSource}">
+    <Grid Padding="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Entry Text="{Binding SearchTerm, Mode=OneWayToSource}"
+               Placeholder="What are you looking for?" PlaceholderColor="Gray">
             <Entry.Behaviors>
                 <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}" />
             </Entry.Behaviors>
         </Entry>
 
-        <controls:InfiniteListView ItemsSource="{Binding Places}" LoadMoreCommand="{Binding LoadMoreCommand}">
+        <Image Source="Settings.png" Grid.Column="1">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding NavigateToSettingsCommand}" />
+            </Image.GestureRecognizers>
+        </Image>
+
+        <controls:InfiniteListView ItemsSource="{Binding Places}"
+                                   LoadMoreCommand="{Binding LoadMoreCommand}"
+                                   Grid.Row="1" Grid.ColumnSpan="2">
             <controls:InfiniteListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <Label Text="{Binding Name}" Margin="12,6,6,6" />
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Rating}" />
+                                    <Label Text="{Binding Name}" />
+                                </StackLayout>
+                                <Label Text="{Binding Address}" />
+                            </StackLayout>
                         </ViewCell.View>
                     </ViewCell>
                 </DataTemplate>
             </controls:InfiniteListView.ItemTemplate>
         </controls:InfiniteListView>
-    </StackLayout>
+    </Grid>
 </ContentPage>

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage x:Class="MyPlaces.SettingsPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyPlaces.Controls"
-             x:Class="MyPlaces.SettingsPage">
+             Title="Settings">
 
-    <StackLayout>
-        <Label Text="Select Default Data Provider" />
-        <controls:BindablePicker Title="Available Data Provider"
+    <StackLayout Padding="12">
+        <Label Text="Default data provider" />
+        <controls:BindablePicker Title="Available providers"
                                  ItemsSource="{Binding Providers}" 
                                  SelectedItem="{Binding Default}"
                                  DisplayMemberPath="Name" />

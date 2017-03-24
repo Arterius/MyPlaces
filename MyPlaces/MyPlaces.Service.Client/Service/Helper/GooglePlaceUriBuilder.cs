@@ -16,7 +16,7 @@ namespace MyPlaces.Service.Client.Service.Helper
 
         public Uri ConstructSearch(string keyword)
         {
-            string uri = $"{_baseUri}?query={WebUtility.HtmlEncode(keyword)}&key={_apiKey}";
+            string uri = $"{_baseUri}?query={WebUtility.HtmlEncode(keyword)}+in+Yerevan&key={_apiKey}";
             return new Uri(uri);
         }
 
