@@ -16,9 +16,6 @@ namespace MyPlaces.Service.Client.Service
                 string response = await httpClient.GetStringAsync(requestUri);
 
                 return response;
-                //var response = httpClient.GetAsync(requestUri);
-                //var parsed = await response.Result.Content.ReadAsStringAsync();
-                //return parsed;
             }
         }
     }

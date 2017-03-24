@@ -7,6 +7,7 @@ using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.Service.Client.DTO.Foursquare;
 using MyPlaces.Service.Client.Service.Helper;
+using MyPlaces.Service.Client.Exceptions;
 
 namespace MyPlaces.Service.Client.Service
 {
@@ -57,7 +58,7 @@ namespace MyPlaces.Service.Client.Service
 
                 if (response.Meta.Code != 200)
                 {
-                    throw new Exception("HTTP response is not OK");
+                    throw new DataAccessException("Error Getting Data");
                 }
 
                 List<Venue> venues = response.Response.Groups.SelectMany(g => g.Items.Select(i => i.Venue)).ToList();
@@ -70,7 +71,7 @@ namespace MyPlaces.Service.Client.Service
 
                 return places;
             }
-            catch (Exception)
+            catch (BaseException)
             {
                 throw;
             }

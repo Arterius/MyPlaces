@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
@@ -18,7 +17,6 @@ namespace MyPlaces.ViewModel.Helpers
         public void AddRange(IEnumerable<T> list, bool clear = false)
         {
             if (list == null) return;
-                //throw new ArgumentNullException("list");
 
             _suppressNotification = true;
 

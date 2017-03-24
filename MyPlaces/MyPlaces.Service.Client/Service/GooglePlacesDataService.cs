@@ -7,6 +7,7 @@ using MyPlaces.Service.Client.Contracts.Repository;
 using MyPlaces.Service.Client.Contracts.Service.Data;
 using MyPlaces.Service.Client.DTO.Google;
 using MyPlaces.Service.Client.Service.Helper;
+using MyPlaces.Service.Client.Exceptions;
 
 namespace MyPlaces.Service.Client.Service
 {
@@ -40,7 +41,7 @@ namespace MyPlaces.Service.Client.Service
         {
             if (string.IsNullOrEmpty(_nextPageToken))
             {
-                throw new InvalidOperationException("No data to retrieve");
+                throw new DataPaginationException("No data to retrieve");
             }
             return await MakeRequest(_uriBuilder.ConstructGetNext(null, _nextPageToken));
         }
@@ -53,7 +54,7 @@ namespace MyPlaces.Service.Client.Service
 
                 if (response.Status != "OK")
                 {
-                    throw new Exception("HTTP response is not OK");
+                    throw new Exception("Error Getting Data");
                 }
 
                 _nextPageToken = response.NextPageToken;
@@ -67,7 +68,7 @@ namespace MyPlaces.Service.Client.Service
 
                 return places;
             }
-            catch (Exception)
+            catch (BaseException)
             {
                 throw;
             }

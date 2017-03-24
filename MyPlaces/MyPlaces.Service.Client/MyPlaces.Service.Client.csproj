@@ -38,6 +38,10 @@
     <Compile Include="Contracts\Repository\IPlacesRepository.cs" />
     <Compile Include="Contracts\Service\Data\IPlacesDataService.cs" />
     <Compile Include="Contracts\Service\General\IHttpService.cs" />
+    <Compile Include="Exceptions\BaseException.cs" />
+    <Compile Include="Exceptions\BusinessLogicException.cs" />
+    <Compile Include="Exceptions\DataAccessException.cs" />
+    <Compile Include="Exceptions\DataPaginationException.cs" />
     <Compile Include="Service\FoursquareVenuesDataService.cs" />
     <Compile Include="Service\GooglePlacesDataService.cs" />
     <Compile Include="Service\Helper\FoursquareVenueUriBuilder.cs" />

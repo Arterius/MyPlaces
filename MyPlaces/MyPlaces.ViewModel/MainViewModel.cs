@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MyPlaces.Service.Client.Contracts.Service.Data;
-using MyPlaces.ViewModel.Helpers;
-using MyPlaces.Model;
 using GalaSoft.MvvmLight.Command;
-using System.Threading;
-using GalaSoft.MvvmLight.Views;
-using MyPlaces.ViewModel.Common;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Views;
+using MyPlaces.Model;
+using MyPlaces.Service.Client.Contracts.Service.Data;
+using MyPlaces.Service.Client.Exceptions;
+using MyPlaces.ViewModel.Common;
+using MyPlaces.ViewModel.Helpers;
 
 namespace MyPlaces.ViewModel
 {
@@ -38,6 +37,8 @@ namespace MyPlaces.ViewModel
         public RelayCommand SearchCommand { get; private set; }
         public RelayCommand LoadMoreCommand { get; private set; }
         public RelayCommand NavigateToSettingsCommand { get; private set; }
+        public RelayCommand ReloadDataCommand { get; private set; }
+
 
         public MainViewModel(IPlacesDataServiceFactory placesDataServiceFactory, INavigationService navigationService)
         {
@@ -52,13 +53,9 @@ namespace MyPlaces.ViewModel
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
             LoadMoreCommand = new RelayCommand(LoadMore, () => !string.IsNullOrWhiteSpace(SearchTerm));
             NavigateToSettingsCommand = new RelayCommand(() => _navigationService.NavigateTo(ViewModelLocator.SettingsPage));
+            ReloadDataCommand = new RelayCommand(ReloadData, () => !string.IsNullOrWhiteSpace(SearchTerm));
 
-
-            Messenger.Default.Register<PlaceDataProvider>(this, async (_) =>
-            {
-                List<Place> places = await RetrieveDataAsync();
-                Places.AddRange(places, true);
-            });
+            Messenger.Default.Register<PlaceDataProvider>(this, (_) => ReloadDataCommand.Execute(null));
         }
 
         private async void DelayedSearch() => await DelayedSearchAsync();
@@ -86,6 +83,14 @@ namespace MyPlaces.ViewModel
 
         private async void LoadMore() => Places.AddRange(await RetrieveDataAsync(loadMore: true), clear: false);
 
+        private async void ReloadData() => await ReloadDataAsync();
+
+        private async Task ReloadDataAsync()
+        {
+            List<Place> places = await RetrieveDataAsync();
+            Places.AddRange(places, true);
+        }
+
         private async Task<List<Place>> RetrieveDataAsync(bool loadMore = false)
         {
             List<Place> places = null;
@@ -94,7 +99,10 @@ namespace MyPlaces.ViewModel
                 IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(PlacesDataServiceProviders.Instance.Default.Id);
                 places = loadMore ? await dataService.GetNext() : await dataService.Search(SearchTerm);
             }
-            catch { }
+            catch(BaseException)
+            {
+                //
+            }
 
             return places;
         }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using MyPlaces.Service.Client.Contracts.Service.General;
+using MyPlaces.Service.Client.Exceptions;
 
 namespace MyPlaces.Service.Client.Repository
 {
@@ -27,9 +28,9 @@ namespace MyPlaces.Service.Client.Repository
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new DataAccessException("Error Getting Data", e);
             }
         }
     }
