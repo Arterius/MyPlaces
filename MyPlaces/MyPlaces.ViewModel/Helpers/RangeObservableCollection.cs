@@ -17,8 +17,8 @@ namespace MyPlaces.ViewModel.Helpers
 
         public void AddRange(IEnumerable<T> list, bool clear = false)
         {
-            if (list == null)
-                throw new ArgumentNullException("list");
+            if (list == null) return;
+                //throw new ArgumentNullException("list");
 
             _suppressNotification = true;
 

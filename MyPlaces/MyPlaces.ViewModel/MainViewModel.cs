@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Command;
 using System.Threading;
 using GalaSoft.MvvmLight.Views;
 using MyPlaces.ViewModel.Common;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPlaces.ViewModel
 {
@@ -29,9 +30,6 @@ namespace MyPlaces.ViewModel
             {
                 if (_searchTerm == value) return;
                 _searchTerm = value;
-
-                //Uncomment to run from WPF project
-                //DelayedSearch();
             }
         }
 
@@ -54,11 +52,13 @@ namespace MyPlaces.ViewModel
             SearchCommand = new RelayCommand(DelayedSearch, () => !string.IsNullOrWhiteSpace(SearchTerm));
             LoadMoreCommand = new RelayCommand(LoadMore, () => !string.IsNullOrWhiteSpace(SearchTerm));
             NavigateToSettingsCommand = new RelayCommand(() => _navigationService.NavigateTo(ViewModelLocator.SettingsPage));
-            //NavigateToSettingsCommand = new RelayCommand(() =>
-            //{
-            //    _defaultDataProvider = PlacesDataServiceProviders.Google;
-            //    SearchCommand.Execute(null);
-            //});
+
+
+            Messenger.Default.Register<PlaceDataProvider>(this, async (_) =>
+            {
+                List<Place> places = await RetrieveDataAsync();
+                Places.AddRange(places, true);
+            });
         }
 
         private async void DelayedSearch() => await DelayedSearchAsync();
@@ -88,8 +88,13 @@ namespace MyPlaces.ViewModel
 
         private async Task<List<Place>> RetrieveDataAsync(bool loadMore = false)
         {
-            IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(PlacesDataServiceProviders.Instance.Default.Id);
-            List<Place> places = loadMore ? await dataService.GetNext() : await dataService.Search(SearchTerm);
+            List<Place> places = null;
+            try
+            {
+                IPlacesDataService dataService = _placesDataServiceFactory.GetDataService(PlacesDataServiceProviders.Instance.Default.Id);
+                places = loadMore ? await dataService.GetNext() : await dataService.Search(SearchTerm);
+            }
+            catch { }
 
             return places;
         }

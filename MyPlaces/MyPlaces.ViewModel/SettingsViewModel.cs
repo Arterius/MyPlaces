@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MyPlaces.ViewModel.Common;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPlaces.ViewModel
 {
@@ -26,7 +27,11 @@ namespace MyPlaces.ViewModel
             }
             set
             {
-                PlacesDataServiceProviders.Instance.Default = value;
+                if (PlacesDataServiceProviders.Instance.Default != value)
+                {
+                    PlacesDataServiceProviders.Instance.Default = value;
+                    Messenger.Default.Send(value);
+                }
             }
         }
     }
