@@ -33,8 +33,8 @@ namespace MyPlaces.ViewModel.Common
         {
             Providers = new List<PlaceDataProvider>
             {
-                new PlaceDataProvider { Id = Google, Name = "Google Places API" },
-                new PlaceDataProvider { Id = Foursquare, Name = "Foursquare Venues API" }
+                new PlaceDataProvider { Id = Foursquare, Name = "Foursquare Venues API" },
+                new PlaceDataProvider { Id = Google, Name = "Google Places API" }
             };
 
             Default = Providers.First();

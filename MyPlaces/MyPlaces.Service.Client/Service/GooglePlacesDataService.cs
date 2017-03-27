@@ -16,6 +16,7 @@ namespace MyPlaces.Service.Client.Service
         private readonly IPlacesRepository<RootObject> _placesRepository;
         private readonly IUriBuilder _uriBuilder;
         private const string _baseUri = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+        private const string _basePhotoUri = "https://maps.googleapis.com/maps/api/place/photo";
         private readonly string _apiKey;
 
         private string _nextPageToken = string.Empty;
@@ -63,9 +64,9 @@ namespace MyPlaces.Service.Client.Service
                 {
                     Address = p.FormattedAddress,
                     Name = p.Name,
-                    Rating = p.Rating
+                    Rating = p.Rating,
+                    Photo = $"{_basePhotoUri}?maxwidth=300&maxheight=300&photoreference={p.Photos?.FirstOrDefault()?.PhotoReference}&key={_apiKey}"
                 }).ToList();
-
                 return places;
             }
             catch (BaseException)

@@ -77,7 +77,7 @@ namespace MyPlaces.Service.Client.Service
                     Address = v.Location.Address,
                     Name = v.Name,
                     Rating = v.Rating,
-                    Photo = v.FeaturedPhotos != null ? $"{v.FeaturedPhotos.Items.FirstOrDefault().Prefix}300x300{v.FeaturedPhotos.Items.FirstOrDefault().Suffix}" : string.Empty
+                    Photo = $"{v.FeaturedPhotos?.Items.FirstOrDefault()?.Prefix}300x300{v.FeaturedPhotos?.Items.FirstOrDefault()?.Suffix}"
                 }).ToList();
 
                 return places;

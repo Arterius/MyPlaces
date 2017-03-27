@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MyPlaces.Service.Client.DTO.Google
 {
@@ -10,6 +11,8 @@ namespace MyPlaces.Service.Client.DTO.Google
 
         [JsonProperty(PropertyName = "formatted_address")]
         public string FormattedAddress { get; set; }
+
+        public List<Photo> Photos { get; set; }
 
         public double Rating { get; set; }
     }

@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyPlaces.Controls"
              xmlns:behaviors="clr-namespace:MyPlaces.Behaviors"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="My Places">
 
     <Grid Padding="12">
@@ -31,33 +32,50 @@
 
         <controls:InfiniteListView ItemsSource="{Binding Places}"
                                    LoadMoreCommand="{Binding LoadMoreCommand}"
+                                   RowHeight="72"
                                    Grid.Row="1" Grid.ColumnSpan="2">
             <controls:InfiniteListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <Grid>
+                            <Grid Margin="0,6,6,6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="72" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <BoxView Color="Green" />
+                                <ffimageloading:CachedImage Grid.RowSpan="2" 
+                                                            HorizontalOptions="Center" VerticalOptions="Center"
+                                                            DownsampleToViewSize="True" 
+                                                            Aspect="AspectFill"
+                                                            Source="{Binding Photo}"
+                                                            LoadingPlaceholder = "DefaultPhoto.png"
+                                                            ErrorPlaceholder = "DefaultPhoto.png">
+                                </ffimageloading:CachedImage>
+                                
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Start"
+                                       LineBreakMode="TailTruncation"
+                                       FontSize="18" />
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Address}"
+                                       VerticalOptions="Start"
+                                       LineBreakMode="TailTruncation"
+                                       TextColor="Gray"
+                                       FontSize="14" />
+
+                                <BoxView Grid.Column="2" Color="Green" />
                                 <Label Text="{Binding Rating}"
+                                       Grid.Column="2"
                                        FontSize="14"
                                        TextColor="White"
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center"/>
-                                <Label Grid.Column="1"
-                                       Text="{Binding Name}"
-                                       FontSize="16" />
-                                <Label Grid.Row="1" Grid.Column="1"
-                                       Text="{Binding Address}"
-                                       TextColor="Gray"
-                                       FontSize="10" />
                             </Grid>
                         </ViewCell.View>
                     </ViewCell>

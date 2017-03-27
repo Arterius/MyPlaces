@@ -39,6 +39,7 @@
     <Compile Include="Contracts\Service\Data\IPlacesDataService.cs" />
     <Compile Include="Contracts\Service\General\IHttpService.cs" />
     <Compile Include="DTO\Foursquare\FeaturedPhotos.cs" />
+    <Compile Include="DTO\Google\Photo.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\DataAccessException.cs" />
