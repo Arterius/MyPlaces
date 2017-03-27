@@ -21,8 +21,9 @@ namespace MyPlaces.ViewModel
         private readonly INavigationService _navigationService;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private bool _pagingAvailable = true;
-
         private string _searchTerm;
+        private bool _isBusy;
+
         public string SearchTerm
         {
             get { return _searchTerm.Trim(); }
@@ -33,13 +34,23 @@ namespace MyPlaces.ViewModel
             }
         }
 
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if (_isBusy == value) return;
+                _isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RangeObservableCollection<Place> Places { get; set; }
 
         public RelayCommand SearchCommand { get; private set; }
         public RelayCommand LoadMoreCommand { get; private set; }
         public RelayCommand NavigateToSettingsCommand { get; private set; }
         public RelayCommand ReloadDataCommand { get; private set; }
-
 
         public MainViewModel(IPlacesDataServiceFactory placesDataServiceFactory, INavigationService navigationService)
         {
@@ -71,6 +82,7 @@ namespace MyPlaces.ViewModel
 
             try
             {
+                _pagingAvailable = true;
                 await Task.Delay(_searchDelay, _cancellationTokenSource.Token).ContinueWith(async (_) =>
                 {
                     if (originalSearchTerm == SearchTerm)
@@ -79,7 +91,7 @@ namespace MyPlaces.ViewModel
                     }
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }
-            catch { }
+            catch(TaskCanceledException) { }
         }
 
         private async void LoadMore() => await LoadMoreAsync();
@@ -103,6 +115,8 @@ namespace MyPlaces.ViewModel
 
         private async Task<List<Place>> RetrieveDataAsync(bool loadMore = false)
         {
+            IsBusy = true;
+
             List<Place> places = null;
             try
             {
@@ -116,6 +130,10 @@ namespace MyPlaces.ViewModel
             catch (BaseException)
             {
                 //
+            }
+            finally
+            {
+                IsBusy = false;
             }
 
             return places;

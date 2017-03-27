@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyPlaces.Controls"
              xmlns:behaviors="clr-namespace:MyPlaces.Behaviors"
-             Title = "My Places">
+             Title="My Places">
 
     <Grid Padding="12">
         <Grid.RowDefinitions>
@@ -36,17 +36,36 @@
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Rating}" />
-                                    <Label Text="{Binding Name}" />
-                                </StackLayout>
-                                <Label Text="{Binding Address}" />
-                            </StackLayout>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <BoxView Color="Green" />
+                                <Label Text="{Binding Rating}"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       FontSize="16" />
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Address}"
+                                       TextColor="Gray"
+                                       FontSize="10" />
+                            </Grid>
                         </ViewCell.View>
                     </ViewCell>
                 </DataTemplate>
             </controls:InfiniteListView.ItemTemplate>
         </controls:InfiniteListView>
+        <ActivityIndicator IsRunning="{Binding IsBusy, Mode=TwoWay}" 
+                           Grid.RowSpan="2" Grid.ColumnSpan="2"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
     </Grid>
 </ContentPage>

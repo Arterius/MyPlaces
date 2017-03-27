@@ -20,13 +20,13 @@ namespace MyPlaces.Service.Client.Service.Helper
 
         public Uri ConstructSearch(string keyword)
         {
-            string uri = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={WebUtility.HtmlEncode(keyword)}&limit={_limit}";
+            string uri = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&venuePhotos=1&query={WebUtility.HtmlEncode(keyword)}&limit={_limit}";
             return new Uri(uri);
         }
 
         public Uri ConstructGetNext(string keyword, string offset)
         {
-            string uri = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&query={WebUtility.HtmlEncode(keyword)}&limit={_limit}&offset={offset}";
+            string uri = $"{_baseUri}?client_id={_clientId}&client_secret={_clientSecret}&v=20130815&near=Yerevan&venuePhotos=1&query={WebUtility.HtmlEncode(keyword)}&limit={_limit}&offset={offset}";
             return new Uri(uri);
         }
     }

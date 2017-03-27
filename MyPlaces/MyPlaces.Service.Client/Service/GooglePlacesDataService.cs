@@ -54,7 +54,7 @@ namespace MyPlaces.Service.Client.Service
 
                 if (response.Status != "OK")
                 {
-                    throw new Exception("Error Getting Data");
+                    return new List<Place>();
                 }
 
                 _nextPageToken = response.NextPageToken;

@@ -21,6 +21,7 @@ namespace MyPlaces.Service.Client.Service
         private readonly string _clientId;
         private readonly string _clientSecret;
         private string _keyword;
+        private int _totalResults;
 
         public FoursquareVenuesDataService(IPlacesRepository<RootObject> placesRepository, string clientId, string clientSecret)
         {
@@ -38,6 +39,8 @@ namespace MyPlaces.Service.Client.Service
         {
             if (string.IsNullOrWhiteSpace(keyword)) throw new ArgumentNullException(nameof(keyword));
 
+            _offset = 1;
+            _totalResults = 0;
             _keyword = keyword;
 
             return await MakeRequest(_uriBuilder.ConstructSearch(keyword));
@@ -45,6 +48,11 @@ namespace MyPlaces.Service.Client.Service
 
         public async Task<List<Place>> GetNext()
         {
+            if (_limit * _offset >= _totalResults)
+            {
+                throw new DataPaginationException("No data to retrieve");
+            }
+
             string offset = (_limit * _offset).ToString();
             _offset += 1;
             return await MakeRequest(_uriBuilder.ConstructGetNext(_keyword, offset));
@@ -58,15 +66,18 @@ namespace MyPlaces.Service.Client.Service
 
                 if (response.Meta.Code != 200)
                 {
-                    throw new DataAccessException("Error Getting Data");
+                    return new List<Place>();
                 }
+
+                _totalResults = response.Response.TotalResults;
 
                 List<Venue> venues = response.Response.Groups.SelectMany(g => g.Items.Select(i => i.Venue)).ToList();
                 List<Place> places = venues.Select(v => new Place
                 {
                     Address = v.Location.Address,
                     Name = v.Name,
-                    Rating = v.Rating
+                    Rating = v.Rating,
+                    Photo = v.FeaturedPhotos != null ? $"{v.FeaturedPhotos.Items.FirstOrDefault().Prefix}300x300{v.FeaturedPhotos.Items.FirstOrDefault().Suffix}" : string.Empty
                 }).ToList();
 
                 return places;

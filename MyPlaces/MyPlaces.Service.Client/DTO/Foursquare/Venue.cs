@@ -8,6 +8,8 @@
 
         public double Rating { get; set; }
 
+        public FeaturedPhotos FeaturedPhotos { get; set; }
+
         public Contact Contact { get; set; }
 
         public Location Location { get; set; }

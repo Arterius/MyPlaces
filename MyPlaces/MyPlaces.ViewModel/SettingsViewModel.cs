@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using MyPlaces.ViewModel.Common;
 using GalaSoft.MvvmLight.Messaging;
@@ -30,7 +26,11 @@ namespace MyPlaces.ViewModel
                 if (PlacesDataServiceProviders.Instance.Default != value)
                 {
                     PlacesDataServiceProviders.Instance.Default = value;
-                    Messenger.Default.Send(value);
+                    try
+                    {
+                        Messenger.Default.Send(value);
+                    }
+                    catch { }
                 }
             }
         }
